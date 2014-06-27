@@ -30,6 +30,18 @@ case node[:platform]
         end
         execute "dpkg -i cdh4-repository_1.0_all.deb"
         execute "apt-get update"
+    when "debian"
+	 case node[:lsb][:codename]
+		when "wheezy"
+		# wheezy still not supported by chd4 !
+		# ref : https://groups.google.com/a/cloudera.org/forum/#!topic/cdh-user/MOSaRLMTQ3U
+		execute "wget http://ftp.pl.debian.org/debian/pool/main/o/openssl/libssl0.9.8_0.9.8o-4squeeze14_amd64.deb"
+		execute "dpkg -i libssl0.9.8_0.9.8o-4squeeze14_amd64.deb"
+	 end
+	 execute "curl -s http://archive.cloudera.com/cdh4/debian/squeeze/amd64/cdh/archive.key | apt-key add -"
+	 execute "wget http://archive.cloudera.com/cdh4/one-click-install/squeeze/amd64/cdh4-repository_1.0_all.deb"
+	 execute "dpkg -i cdh4-repository_1.0_all.deb"
+	 execute "apt-get update"
 end
 
 
